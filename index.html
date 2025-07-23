@@ -2,30 +2,27 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>লটারি ফর্ম</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lottery Entry Form</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>🎉 লটারি অংশগ্রহণ ফর্ম</h1>
-    <p>✅ লটারি অংশ নিতে হলে অবশ্যই আমাদের টেলিগ্রাম গ্রুপে <strong>জয়েন</strong> থাকতে হবে।<br> 
-    🛑 বিজয়ী হলেও গ্রুপে না থাকলে পুরস্কার **বাতিল** করা হবে।</p>
-
-    <a href="https://t.me/+MeoTD85pHfo5YzU1" target="_blank" class="join-btn">📲 আমাদের Telegram গ্রুপে জয়েন করুন</a>
-
+    <p>✅ লটারি অংশগ্রহণের জন্য আমাদের টেলিগ্রাম গ্রুপে জয়েন থাকা বাধ্যতামূলক।</p>
+    <a href="https://t.me/+MeoTD85pHfo5YzU1" target="_blank" class="join-btn">📲 Telegram গ্রুপে জয়েন করুন</a>
+    
     <form id="lotteryForm">
-      <input type="text" id="phone" placeholder="📱 আপনার ফোন নাম্বার" required />
-      <input type="text" id="telegram" placeholder="🆔 আপনার Telegram ID" required />
-      
+      <input type="text" id="phone" placeholder="আপনার ফোন নাম্বার" required />
+      <input type="text" id="telegram" placeholder="আপনার Telegram ID" required />
       <select id="platform" required>
-        <option value="">📍 প্ল্যাটফর্ম সিলেক্ট করুন</option>
+        <option value="">প্ল্যাটফর্ম নির্বাচন করুন</option>
         <option value="1xBet">1xBet</option>
         <option value="Linebet">Linebet</option>
       </select>
-
-      <button type="submit">✅ সাবমিট করুন</button>
+      <button type="submit">সাবমিট করুন</button>
     </form>
+    <p id="status"></p>
   </div>
 
   <script src="config.js"></script>
