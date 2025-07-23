@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lottery Entry</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 ফ্রি লটারি 🎉</h1>
+    <p>নিচের ফর্ম পূরণ করুন এবং আমাদের <a href="https://t.me/+MeoTD85pHfo5YzU1" target="_blank">Telegram গ্রুপে</a> জয়েন করুন।</p>
+    <form id="lotteryForm">
+      <input type="text" id="name" placeholder="আপনার নাম" required />
+      <input type="text" id="number" placeholder="আপনার মোবাইল নাম্বার" required />
+      <button type="submit">সাবমিট করুন</button>
+    </form>
+    <p id="status"></p>
+  </div>
+  <script src="config.js"></script>
+  <script>
+    const form = document.getElementById('lotteryForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const number = document.getElementById('number').value;
+
+      const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        method: 'GET',
+        headers: {
+          'X-Master-Key': API_KEY
+        }
+      });
+      const data = await response.json();
+      const entries = data.record.entries || [];
+      entries.push({ name, number });
+
+      await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': API_KEY,
+          'X-Bin-Private': true
+        },
+        body: JSON.stringify({ entries })
+      });
+
+      status.textContent = "✅ সাবমিশন সফল হয়েছে!";
+      form.reset();
+    });
+  </script>
+</body>
+</html>
