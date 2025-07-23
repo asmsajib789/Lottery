@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 Admin Panel</h1>
+    <input type="password" id="adminPass" placeholder="Enter Admin Password" />
+    <button onclick="authAdmin()">Login</button>
+
+    <div id="adminArea" style="display:none;">
+      <h2>🎁 Lottery Entries</h2>
+      <ul id="entryList"></ul>
+      <button onclick="selectWinners()">🎉 Select Winners</button>
+      <div id="winners"></div>
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script>
+    function authAdmin() {
+      const pass = document.getElementById("adminPass").value;
+      if (pass === ADMIN_PASS) {
+        document.getElementById("adminArea").style.display = "block";
+      } else {
+        alert("❌ Wrong password!");
+      }
+    }
+
+    async function fetchData() {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { "X-Master-Key": API_KEY }
+      });
+      const json = await res.json();
+      return json.record.entries || [];
+    }
+
+    async function selectWinners() {
+      const entries = await fetchData();
+      const winners = [];
+      while (winners.length < 2 && entries.length > 0) {
+        const randIndex = Math.floor(Math.random() * entries.length);
+        winners.push(entries.splice(randIndex, 1)[0]);
+      }
+      document.getElementById("winners").innerHTML = "<h3>🏆 Winners:</h3>" + winners.map(w => `<p>${w.name} - ${w.number}</p>`).join("");
+    }
+
+    window.onload = async () => {
+      const entries = await fetchData();
+      document.getElementById("entryList").innerHTML = entries.map(e => `<li>${e.name} - ${e.number}</li>`).join("");
+    };
+  </script>
+</body>
+</html>
