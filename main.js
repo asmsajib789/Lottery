@@ -1,39 +1,42 @@
 document.getElementById("lotteryForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const phone = document.getElementById("phone").value;
-  const telegram = document.getElementById("telegram").value;
+  const phone = document.getElementById("phone").value.trim();
+  const telegram = document.getElementById("telegram").value.trim();
   const platform = document.getElementById("platform").value;
 
-  const newEntry = { phone, telegram, platform, timestamp: new Date().toISOString() };
+  if (!phone || !telegram || !platform) {
+    alert("সকল তথ্য পূরণ করুন");
+    return;
+  }
 
   try {
+    // পুরোনো এন্ট্রি নিয়ে আসা
     const response = await fetch(`${BIN_URL}/latest`, {
-      method: "GET",
       headers: {
-        "X-Master-Key": API_KEY
-      }
+        "X-Master-Key": API_KEY,
+      },
     });
-
     const data = await response.json();
-    const currentEntries = data.record.entries || [];
 
-    currentEntries.push(newEntry);
+    const entries = data.record.entries || [];
+    entries.push({ phone, telegram, platform, timestamp: new Date().toISOString() });
 
+    // নতুন এন্ট্রি আপলোড করা
     await fetch(BIN_URL, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "X-Master-Key": API_KEY,
-        "X-Bin-Versioning": false
+        "X-Bin-Versioning": "false",
       },
-      body: JSON.stringify({ entries: currentEntries })
+      body: JSON.stringify({ entries }),
     });
 
-    alert("✅ আপনার তথ্য সাবমিট হয়েছে!");
-    document.getElementById("lotteryForm").reset();
-  } catch (err) {
-    alert("❌ সাবমিট করতে সমস্যা হচ্ছে!");
-    console.error(err);
+    document.getElementById("status").innerText = "✅ আপনার তথ্য সফলভাবে জমা হয়েছে!";
+    this.reset();
+  } catch (error) {
+    console.error(error);
+    alert("❌ কিছু ভুল হয়েছে, আবার চেষ্টা করুন!");
   }
 });
